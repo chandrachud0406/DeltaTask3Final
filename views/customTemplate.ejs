@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Russo+One&display=swap" rel="stylesheet">        
+        <title>Form creator</title>
+        <style>
+            /* Simple dashboard grid CSS */
+            body {
+                font-family: 'Russo One', sans-serif;
+            }
+            /* Assign grid instructions to our parent grid container */
+            .grid-container {
+            display: grid;
+            grid-template-columns: 100%;
+            grid-template-rows: 7% 1fr 7%;
+            grid-template-areas:
+                "header"
+                "main"
+                "footer";
+            height: 100vh;
+            }
+            .header, .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background-color: #008067;
+            }
+
+            /* Give every child element its grid name */
+            .header {
+            grid-area: header;
+            background-color: #008067;
+            }
+
+            .main {
+            grid-area: main;
+            background-color: white;
+            }
+
+            .footer {
+            grid-area: footer;
+            background-color: #008067;
+            }
+
+            .form-list{
+                margin: 7% 37%;
+                width: 40%;
+
+                padding: 1em;/*
+                border: 1px solid #CCC;
+                border-radius: 1em;*/
+                background: white;
+            }
+
+            .form-element{
+                width: 70%;
+                height: 10%;
+                display: flex;
+                justify-content: space-between;
+                padding: 1em;
+                border: 1px solid #CCC;
+                border-radius: 1em;
+                background: #008067;
+                
+            }
+
+            /* Button used to open the contact form - fixed at the bottom of the page */
+            .open-button {
+                color: white;
+                padding: 16px 20px;
+                border: none;
+                cursor: pointer;
+                opacity: 0.8;
+                position: absolute;
+                bottom: 7%;
+                right: 1.2%;
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <div class="grid-container">
+            <header class="header">
+                <a href="/dashboard"><button>Go back</button></a>
+            </header>
+            <main class="main">
+                <div class="form-list">
+                    <p style="margin: 3% 25%;">Create custom templates</p>
+                        <div class="form-element">
+                            <p> Tshirt signup</p>
+                            <div class="form-buttons">
+                                <a href="/form/custom/create/1"><i class="fa fa-plus-circle my-float" style="color: white;font-size: 30px;"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-element">
+                            <p>Event RSVP</p>
+                            <div class="form-buttons">
+                                <a href="/form/custom/create/2"><i class="fa fa-plus-circle my-float" style="color: white;font-size: 30px;" ></i></a>
+                            </div>
+                        </div>
+                        <div class="form-element">
+                            <p>Personal details</p>
+                            <div class="form-buttons">
+                                <a href="/form/custom/create/3"><i class="fa fa-plus-circle my-float" style="color: white;font-size: 30px;"></i></a>
+                            </div>
+                        </div>
+                </div>
+            </main>
+            <footer class="footer"></footer>
+        </div>
+
+        <script>
+        </script>
+    </body>
+</html>

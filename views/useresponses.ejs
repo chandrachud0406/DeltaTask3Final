@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href="https://fonts.googleapis.com/css?family=Faster+One&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Oswald:400,500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Russo+One&display=swap" rel="stylesheet">
+        <title>Form creator</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <style>
+
+            /* Assign grid dimensions*/
+            input{
+                border:none;
+                background:white;
+                width:100%;
+                margin:0;
+                font-size: 1.4em;
+                letter-spacing: 0.05em;
+            }
+
+            .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 200px 1fr;
+            grid-template-areas:
+                "header"
+                "main";
+            height: 100vh;
+            }
+
+            .header{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background-color: #008067;
+            }
+
+            /* Give every child element its grid name */
+            .header {
+            grid-area: header;
+            background-color: #008067;
+            }
+
+            .main {
+            grid-area: main;
+            background-color: white;
+            }
+
+            body {font-family: 'Russo One', sans-serif;}
+            * {box-sizing: border-box;}
+
+            /* Button used to open the contact form - fixed at the bottom of the page */
+            .open-button {
+            background-color: #555;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            opacity: 0.8;
+            position: fixed;
+            bottom: 23px;
+            right: 28px;
+            width: 280px;
+            }
+
+            /* The popup form - hidden by default */
+            .form-popup {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            right: 15px;
+            border: 3px solid #f1f1f1;
+            z-index: 9;
+            }
+
+            /* Add styles to the form container */
+            .form-container {
+            padding: 10px;
+            background-color: white;
+            }
+
+            /* Full-width input fields */
+            .form-container input[type=text] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            border: none;
+            background: #f1f1f1;
+            }
+
+            /* When the inputs get focus, do something */
+            input[type=text]:focus {
+            background-color: #ddd;
+            border: 2px solid #008067; 
+            width: 100%;
+            outline: none;
+            }
+
+
+            /* Set a style for the submit/login button */
+            .form-container .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom:10px;
+            opacity: 0.8;
+            }
+
+            /* Add a red background color to the cancel button */
+            .form-container .btn-cancel {
+            background-color: red;
+            }
+
+            /* Add some hover effects to buttons */
+            .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+            }
+
+            .created-form{
+                position: absolute;
+                top: 15%;
+                left: 30%;
+                width: 45%;
+
+                padding: 1em;
+                border: 1px solid #CCC;
+                background: white;
+            }
+
+            .questions {
+                margin: 0 auto;
+                width: 95%;
+                padding: 1em;
+                border: 2px solid black;
+                background: #ffffff;
+            }
+            
+            .share-popup {
+                width: 280px;
+                padding: 1em;
+                border: 1px solid #CCC;
+                border-block-color: black;
+                background: white;
+                margin-top: 300px;
+                margin-left: 750px;
+
+            }
+            button {
+                padding: 10px;
+                color: #009578;
+                font-weight: bold;
+                background: white;
+                width: 100%;
+                border: none;
+                outline: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            button[type=submit]{
+                padding: 10px;
+                color: white;
+                font-weight: bold;
+                background: #009578;
+                width: 100%;
+                border: none;
+                outline: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            input[type=submit] {
+                padding: 10px;
+                color: white;
+                font-weight: bold;
+                background: #009578;
+                width: 100%;
+                border: none;
+                outline: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            button:active {
+                background: #008067;
+            }
+            .share-top{
+                height: 5%;
+                background-color: #008067;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="grid-container">
+            <header class="header">
+                <div class="header__goback"><a href="/form/edit/<%= form._id %>"><button>Go back</button></a></div>
+            </header>
+            <main class="main">
+                <div class="created-form">
+                    <form id="form-submit">    
+                        <p><%= form.title %></p><br>
+                    <% form.questions.forEach(function(qns) { %>
+                        <div class="questions">   
+                            <p> <%= qns.question %> </p><p> <%= qns.answer.length %> Responses </p><br>
+                            <% if(qns.answerType === "radio" || qns.answerType === "checkbox") { %>
+                                <div class="options-list" style="display: none;"> 
+                                    <%= JSON.stringify(qns.options) %>
+                                </div>
+                                <div class="option-count" style="display: none;" >
+                                    <%= JSON.stringify(qns.optionCount) %>
+                                </div>
+                                <div class="grid-container" style= " position: relative; height:50%; width:60%;">
+                                    <canvas id="myChart<%= qns.position %>"></canvas>
+                                </div>
+                            <% } if(qns.answerType === "file") { %>
+                                <%  qns.files.forEach(function(file) { %>
+                                    <% if(file.contentType ==="application/pdf") { %>
+                                        <p><%= file.url %> will be downloaded</p>
+                                        <iframe src = "/<%= file.url %>"  type="application/pdf" height="20" style="display: none;" ></iframe>
+                                    <% } else { %>
+                                        <br>
+                                        <img src = "/<%= file.url %>" width="100" height="100">
+                                        <br>
+                                    <% } %>
+                                <% }); %>
+                            <% } if(qns.answerType === "text" || qns.answerType === "number" || qns.answerType === "date" || qns.answerType === "time"){ %>
+                                <% qns.answer.forEach(function(ans) { %>
+                                    <p><%= ans %></p><br>
+                                <% }); %>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                    </form>
+                </div>
+                <div class="graphs" style="display: none;" >
+                    <%= JSON.stringify(form.mcqOptions) %>
+                </div>
+            </main>
+        </div>
+    <script>
+        var optionsData = document.getElementsByClassName('options-list');
+        var optionCount = document.getElementsByClassName('option-count');
+        var graphOption = document.getElementsByClassName('graphs');
+
+        console.log(optionsData);
+        console.log(optionCount);
+        var graphArray =  JSON.parse(graphOption[0].textContent.trim());
+
+        var i = 0;
+        graphArray.forEach(index => {
+                
+            var chartID = "myChart" + index;
+            
+            var myChart = document.getElementById(chartID).getContext('2d');
+            console.log(myChart);
+
+            var optionsList = [];
+            var optionsCountArray = [];
+        
+            optionsList = JSON.parse(optionsData[i].textContent.trim());
+            optionsCountArray = JSON.parse(optionCount[i].textContent.trim());      
+            
+            console.log(optionsList);
+            console.log(optionsCountArray);
+
+            function drawGraph() {
+
+                var barChart = new Chart(myChart, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: optionsList,
+                        datasets:[{
+                            label: 'Responses',
+                            data: optionsCountArray,
+                            backgroundColor: [
+                                'red',
+                                'blue',
+                                'green',
+                                'yellow'
+                            ],
+                            borderWidth: 1,
+                            borderColor: '#777',
+                            hoverBorderWidth: 3,
+                            hoverBorderColor: '#000'
+
+                        }]
+                    },
+                    options: {
+                        legend:{
+                            display: false
+                        },
+                        title:{
+                            display: true,
+                            text: 'Responses'
+                        },
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+            i = i + 1;
+            drawGraph();
+        });
+
+    </script>
+    </body>
+</html>
