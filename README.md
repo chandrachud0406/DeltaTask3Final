@@ -16,7 +16,7 @@
 
 # Usage Instructions
 
-1. Go to the signup page and register yourself.
+1. Go to the signup page and register yourself with a available username.
 2. Now login in the login page.
 3. Create new forms by clicking the plus button on the bottom of the screen, use the pencil button to create custom forms and
 use the graph button to explore most submitted forms
